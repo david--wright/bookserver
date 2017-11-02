@@ -4,7 +4,7 @@ from oauth2client.client import OAuth2WebServerFlow
 import httplib2
 from oauth2client.contrib import xsrfutil
 from oauth2client.client import flow_from_clientsecrets
-from oauth2client.contrib.django_orm import Storage
+from oauth2client.contrib.django_util.storage import DjangoORMStorage as Storage
  
 from apiclient.discovery import build
 
@@ -28,7 +28,7 @@ from django.core.urlresolvers import reverse
 from itertools import chain
 from library.models import Book, Author, Series, BookFile,Bookish
 from library.myUtils import extract_form_fields
-from oaut_auth.models import CredentialsModel, FlowModel
+from oaut_auth.models import CredentialsModel
 from random import shuffle, randint
 import requests as basic_request
 import re
