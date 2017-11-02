@@ -2,8 +2,8 @@
 import os
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True')
 TEMPLATE_DEBUG = os.environ.get('DJANGO_TEMPLATE_DEBUG', 'DEBUG')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
