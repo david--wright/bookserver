@@ -1,3 +1,10 @@
+Pillow
+django==1.8
 haystack
-git+git:github.com/david--wright/django-inspectional-registration.git
+django-inspectional-registration
+google-api-python-client
+oauth2client
 MySQL-python
+BeautifulSoup4
+jsonpickle
+requests
