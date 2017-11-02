@@ -1,25 +1,26 @@
 # Django settings for bookServer project.
 import os
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True')
+TEMPLATE_DEBUG = os.environ.get('DJANGO_TEMPLATE_DEBUG', 'DEBUG')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
+    (os.environ.get('ADMIN_NAME', ''),os.environ.get('ADMIN_EMAIL', '')),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'library',                      # Or path to database file if using sqlite3.
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.mysql'), # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.environ.get('DATABASE_NAME','library'),                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'marian',
-        'PASSWORD': 'airGreenSolSand',
-        'HOST': 'mydb',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '3306',                      # Set to empty string for default.
+        'USER': os.environ.get('DATABASE_USER', 'root'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
+        'HOST': os.environ.get('DATABASE_HOST', 'mydb'),                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': os.environ.get('DATABASE_PORT', '3306'),                      # Set to empty string for default.
     }
 }
 
@@ -85,7 +86,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY ='+AymMkh47.Q.u398dIcLYJV%XiIAtwvRO5LQ:LRl:"?:MsXyQ&wq7:3;s.^v#0Hb'
+SECRET_KEY =os.environ.get('DJANGO_SECRET_KEY', '+AymMkh47.Q.u398dIcLYJV%XiIAtwvRO5LQ:LRl:"?:MsXyQ&wq7:3;s.^v#0Hb')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -170,10 +171,13 @@ LOGGING = {
 
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'librarian@takewing.org'
-EMAIL_HOST_PASSWORD = 'fireBlueJupiterStone'
-DEFAULT_FROM_EMAIL = 'librarian@takewing.org'
+EMAIL_HOST = os.environ.get('EMAIL_HOST_NAME', 'smtp.gmail.com')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_FROM_ADDRESS', '')
+
+GOOGLE_OAUTH2_CLIENT_ID = os.environ.get('GOOGLE_OAUTH2_CLIENT_ID', '')
+GOOGLE_OAUTH2_CLIENT_SECRET = os.environ.get('GOOGLE_OAUTH2_CLIENT_SECRET', '') 
 
 HAYSTACK_CONNECTIONS = {
     'default': {
