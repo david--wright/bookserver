@@ -17,7 +17,7 @@ DJANGO_SECRET_KEY - Has a default value however that should never be used in pro
 
 Email variables are for sending registation emails.
 EMAIL_HOST - default smtp.gmail.com
-EMAIL_HOST_USER 
+EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD 
 EMAIL_FROM_ADDRESS
 
