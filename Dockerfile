@@ -7,7 +7,7 @@ RUN apt-get update \
 
 WORKDIR /usr/src/app
 COPY requirements.txt ./
-COPY megasdk.whl ./
+COPY "megasdk-3.2.6-py2.py3-none-any.whl" ./
 RUN pip install -r requirements.txt
 COPY . .
 # Need to add migration

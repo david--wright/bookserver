@@ -8,4 +8,4 @@ MySQL-python
 BeautifulSoup4
 jsonpickle
 requests
-megasdk.whl
+megasdk-3.2.6-py2.py3-none-any.whl
