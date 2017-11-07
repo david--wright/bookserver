@@ -91,6 +91,7 @@ class FileType(models.Model):
 class BookFile(models.Model):
     book = models.ForeignKey(Book)
     fileType = models.ForeignKey(FileType)
+    localCache = models.BooleanField(default=False)
     def save_path(instance, filename):
         fname, dot, extension = filename.rpartition('.')
         slug = instance.book.title
