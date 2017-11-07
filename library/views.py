@@ -52,16 +52,7 @@ class AuthorDetail(DetailView):
 class BookList(ListView):
     queryset = Book.objects.order_by('title')
 
-class BookDetail(DetailView):
-    def get_object(self):
-        self.book = get_object_or_404(Book, slug=self.args[0])
-        return self.book
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(BookDetail, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['bookFiles'] = BookFile.objects.filter(book = self.book)
-        return context
+
 
 class Catalog(ListView):
 
@@ -70,6 +61,13 @@ class Catalog(ListView):
     def get_queryset(self):
         return 1
 
+class BookFetch(View):
+    def get(self, request, book_id):
+        #pull book from mega
+        results_list = Book.objects.get(book_id)
+        rawdata = [obj.as_dict() for obj in result_list]
+        serialized_data = json.dumps({'rawdata':rawdata})
+        return HttpResponse(serialized_data, content_type="application/json")
 
 class Index(View):
     def get(self, request):

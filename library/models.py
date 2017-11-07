@@ -2,6 +2,8 @@ from django.db import models
 from myUtils import unique_slugify
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+from django.urls import reverse
+
 
 # Create your models here.
 class Book(models.Model):
@@ -33,16 +35,19 @@ class Book(models.Model):
     def as_dict(self):
         series_data = [{'id':book_series.series.id, 'name':book_series.series.name, 'authors':[model_to_dict(author) for author in book_series.series.authors.all()], \
                         'summary':book_series.series.summary,'position':str(book_series.bookNumber)} for book_series in self.book_series_set.all()]
-        files = [{'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':file.fileLocation.url} for file in self.bookfile_set.all()]
+        
+        files = [{'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':file.fileLocation.url} if file.localCache \
+                    else {'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':reverse('bookFetch', args=[file.id])} \
+                    for file in self.bookfile_set.all()  ]
         return {
             'id':self.id,
             'title':self.title,
             'authors':[model_to_dict(author) for author in self.authors.all()],
-            'publisher':self.publisher,
+            'publisher':model_to_dict(self.publisher),
             'series':series_data,
             'tags':[model_to_dict(tag) for tag in self.tags.all()],
             'slug':self.slug,
-            'isbn':self.isbn,
+            'isbn':str(self.isbn),
             'filetypes':files,
             'coverurl':self.cover.url
             }
