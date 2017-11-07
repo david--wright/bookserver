@@ -2,7 +2,7 @@ from django.db import models
 from myUtils import unique_slugify
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from django.urls import reverse
+from django.core.urlresolvers import reverse
 
 
 # Create your models here.
