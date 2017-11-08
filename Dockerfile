@@ -18,5 +18,5 @@ RUN python manage.py collectstatic --noinput
 COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/* /docker-entrypoint.d/
 EXPOSE 8000
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 #CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
