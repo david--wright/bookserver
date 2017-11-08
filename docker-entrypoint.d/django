@@ -3,7 +3,9 @@ cd /usr/src/app
 # Apply database migrations
 echo "Apply database migrations"
 python manage.py migrate
-
+if [[ -v "${DJANGO_ADMIN_USER}" ]]; then
+    echo "from django.contrib.auth.models import User; User.objects.create_superuser('${DJANGO_ADMIN_USER}', '${DJANGO_ADMIN_EMAIL}', '${DJANGO_ADMIN_PASS}')" | python manage.py shell
+fi
 # Start server
 echo "Starting server"
 python manage.py runserver 0.0.0.0:8000
