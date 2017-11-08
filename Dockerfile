@@ -5,7 +5,7 @@ RUN apt-get update \
         mysql-client libc-ares2 libssl1.0.0 libcrypto++9 libsodium13 libfreeimage3 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY "entrypoint.sh" /
+
 
 WORKDIR /usr/src/app
 COPY requirements.txt ./
