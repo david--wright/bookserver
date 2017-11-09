@@ -37,7 +37,7 @@ class Book(models.Model):
                         'summary':book_series.series.summary,'position':str(book_series.bookNumber)} for book_series in self.book_series_set.all()]
         
         files = [{'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':file.fileLocation.url} if file.localCache \
-                    else {'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':reverse('bookFetch', args=[file.id,fileType.id])} \
+                    else {'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':reverse('bookFetch', args=[file.id])} \
                     for file in self.bookfile_set.all()  ]
         return {
             'id':self.id,

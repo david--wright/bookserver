@@ -134,12 +134,17 @@ def extract_form_fields(soup):
 	
 	return fields
 
-def file_sync(self, book)
+def file_sync(self, file_list)
     #initialize mega connection
-    for ebook in book.bookfile_set.all():
-        path = ebook.fileLocation.url
-        #copy files
-        #if succesfull
-            #set ebook.localCache=True
+    for ebook in file_list:
+        path = ebook.url
+        if ebook.localCache:
+            ebook.localCache=True
+            #copy files
+            #if succesfull
+                #return redirect to ebook.url  
+            #else
+                #set ebook.localCache = False 
+                #return 503
 
 
