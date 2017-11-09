@@ -27,7 +27,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from itertools import chain
 from library.models import Book, Author, Series, BookFile,Bookish
-from library.myUtils import extract_form_fields
+from library.myUtils import extract_form_fields, file_sync
 from oaut_auth.models import CredentialsModel
 from random import shuffle, randint
 import requests as basic_request
@@ -65,8 +65,11 @@ class BookFetch(View):
     def get(self, request, book_id):
         #pull book from mega
         results_list = Book.objects.get(book_id)
+     #TODO: need to adjust this to get a specific file and to check if the request has been made
+        file_sync(results_list)
         rawdata = [obj.as_dict() for obj in result_list]
         serialized_data = json.dumps({'rawdata':rawdata})
+        #Needs to return a redirect to actual file
         return HttpResponse(serialized_data, content_type="application/json")
 
 class Index(View):

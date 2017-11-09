@@ -133,3 +133,13 @@ def extract_form_fields(soup):
 		fields[select['name']] = value
 	
 	return fields
+
+def file_sync(self, book)
+    #initialize mega connection
+    for ebook in book.bookfile_set.all():
+        path = ebook.fileLocation.url
+        #copy files
+        #if succesfull
+            #set ebook.localCache=True
+
+
