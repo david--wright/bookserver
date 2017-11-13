@@ -27,7 +27,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from itertools import chain
 from library.models import Book, Author, Series, BookFile,Bookish
-from library.myUtils import extract_form_fields
+from library.myUtils import extract_form_fields, file_sync
 from oaut_auth.models import CredentialsModel
 from random import shuffle, randint
 import requests as basic_request
@@ -51,7 +51,8 @@ class AuthorDetail(DetailView):
     
 class BookList(ListView):
     queryset = Book.objects.order_by('title')
-
+class BookDetail(DetailView):
+    model = Book
 
 
 class Catalog(ListView):
@@ -62,9 +63,10 @@ class Catalog(ListView):
         return 1
 
 class BookFetch(View):
-    def get(self, request, book_id):
+    def get(self, request, file_id):
         #pull book from mega
-        results_list = Book.objects.get(book_id)
+        results_list = BookFile.objects.get(file_id)
+        file_sync(results_list)
         rawdata = [obj.as_dict() for obj in result_list]
         serialized_data = json.dumps({'rawdata':rawdata})
         return HttpResponse(serialized_data, content_type="application/json")
