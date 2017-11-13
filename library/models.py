@@ -16,14 +16,14 @@ class Book(models.Model):
     tags = models.ManyToManyField('Tag', blank=True,  null = True)
     slug = models.SlugField(blank=True, null = True)
     isbn = models.DecimalField(decimal_places=0, max_digits=13, blank=True, null = True)
-    def save_path_cover(instance, filename):
+    def save_path_cover(self, instance, filename):
         fname, dot, extension = filename.rpartition('.')
         path = instance.title
         path = 'bookCovers/' + path
         return '%s.%s' % (path, extension)
     fileTypes = models.ManyToManyField('FileType', through='BookFile')
     cover = models.ImageField(upload_to=save_path_cover, blank=True, max_length=512)
-    def save_path(instance, filename):
+    def save_path(self, instance, filename):
         fname, dot, extension = filename.rpartition('.')
         slug = instance.book.title
         return '%s.%s' % (slug, extension) 
@@ -97,7 +97,7 @@ class BookFile(models.Model):
     book = models.ForeignKey(Book)
     fileType = models.ForeignKey(FileType)
     localCache = models.BooleanField(default=False)
-    def save_path(instance, filename):
+    def save_path(self, instance, filename):
         fname, dot, extension = filename.rpartition('.')
         slug = instance.book.title
         return '%s.%s' % (slug, extension) 

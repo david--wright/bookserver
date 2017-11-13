@@ -237,9 +237,9 @@ class Autocomplete(View):
             if (search_words[0] in "<random>"):
                 total_items = Book.objects.aggregate(Max('id'))['id__max']
                 if len(search_words) > 1 and int(search_words[1]) < total_items:
-				    result_list =['<random> %s' %filter_search]
+                    result_list =['<random> %s' %filter_search]
                 else: 
-				    result_list =['<random> %d' %total_items]
+                    result_list =['<random> %d' %total_items]
             elif (search_words[0] in "<Author>" or search_words[0] in "<author>"):
                 here = 1
                 result_list = ["<Author> %s" %author.name for author in Author.objects.filter(name__istartswith=filter_search)[:2]] + \
