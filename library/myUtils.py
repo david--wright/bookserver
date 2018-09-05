@@ -129,12 +129,12 @@ def extract_form_fields(soup):
 				value = selected_options[0]['value']
 		else:
 			value = [option['value'] for option in selected_options]
-		
 		fields[select['name']] = value
-	
+
 	return fields
 
-def file_sync(self, file_list)
+
+def file_sync(self, file_list):
     #initialize mega connection
     for ebook in file_list:
         path = ebook.url
