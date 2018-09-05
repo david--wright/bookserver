@@ -9,7 +9,7 @@ RUN ./configure --disable-silent-rules --enable-python --disable-examples
 RUN make
 WORKDIR /home/sdk/bindings/python
 RUN python setup.py bdist_wheel
-RUN mv /home/sdk/bindings/python/dist/megasdk*.whl /home/sdk/bindings/python/dist/megasdk.whl
+
 	
 FROM python:2
 LABEL maintainer="discipleofhoid@gmail.com"
@@ -20,7 +20,8 @@ RUN apt-get update \
 WORKDIR /usr/src/app
 COPY requirements.txt ./
 COPY --from=0 "/home/sdk/bindings/python/dist/" ./
-RUN pip install -r requirements.txt \
+RUN ls megasdk* >> requirements.txt \
+&& pip install -r requirements.txt \
 && ldconfig /usr/local/lib/python2.7/site-packages/mega/
 COPY . .
 RUN python manage.py collectstatic --noinput
