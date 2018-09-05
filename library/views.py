@@ -27,7 +27,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from itertools import chain
 from library.models import Book, Author, Series, BookFile,Bookish
-from library.myUtils import extract_form_fields
+from library.myUtils import extract_form_fields, file_sync
 from oaut_auth.models import CredentialsModel
 from random import shuffle, randint
 import requests as basic_request
@@ -51,17 +51,9 @@ class AuthorDetail(DetailView):
     
 class BookList(ListView):
     queryset = Book.objects.order_by('title')
-
 class BookDetail(DetailView):
-    def get_object(self):
-        self.book = get_object_or_404(Book, slug=self.args[0])
-        return self.book
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(BookDetail, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        context['bookFiles'] = BookFile.objects.filter(book = self.book)
-        return context
+    model = Book
+
 
 class Catalog(ListView):
 
@@ -70,6 +62,14 @@ class Catalog(ListView):
     def get_queryset(self):
         return 1
 
+class BookFetch(View):
+    def get(self, request, file_id):
+        #pull book from mega
+        results_list = BookFile.objects.get(file_id)
+        file_sync(results_list)
+        rawdata = [obj.as_dict() for obj in result_list]
+        serialized_data = json.dumps({'rawdata':rawdata})
+        return HttpResponse(serialized_data, content_type="application/json")
 
 class Index(View):
     def get(self, request):
@@ -239,9 +239,9 @@ class Autocomplete(View):
             if (search_words[0] in "<random>"):
                 total_items = Book.objects.aggregate(Max('id'))['id__max']
                 if len(search_words) > 1 and int(search_words[1]) < total_items:
-				    result_list =['<random> %s' %filter_search]
+                    result_list =['<random> %s' %filter_search]
                 else: 
-				    result_list =['<random> %d' %total_items]
+                    result_list =['<random> %d' %total_items]
             elif (search_words[0] in "<Author>" or search_words[0] in "<author>"):
                 here = 1
                 result_list = ["<Author> %s" %author.name for author in Author.objects.filter(name__istartswith=filter_search)[:2]] + \

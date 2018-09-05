@@ -2,6 +2,8 @@ from django.db import models
 from myUtils import unique_slugify
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
+from django.core.urlresolvers import reverse
+
 
 # Create your models here.
 class Book(models.Model):
@@ -14,14 +16,14 @@ class Book(models.Model):
     tags = models.ManyToManyField('Tag', blank=True,  null = True)
     slug = models.SlugField(blank=True, null = True)
     isbn = models.DecimalField(decimal_places=0, max_digits=13, blank=True, null = True)
-    def save_path_cover(instance, filename):
+    def save_path_cover(self, instance, filename):
         fname, dot, extension = filename.rpartition('.')
         path = instance.title
         path = 'bookCovers/' + path
         return '%s.%s' % (path, extension)
     fileTypes = models.ManyToManyField('FileType', through='BookFile')
     cover = models.ImageField(upload_to=save_path_cover, blank=True, max_length=512)
-    def save_path(instance, filename):
+    def save_path(self, instance, filename):
         fname, dot, extension = filename.rpartition('.')
         slug = instance.book.title
         return '%s.%s' % (slug, extension) 
@@ -33,16 +35,19 @@ class Book(models.Model):
     def as_dict(self):
         series_data = [{'id':book_series.series.id, 'name':book_series.series.name, 'authors':[model_to_dict(author) for author in book_series.series.authors.all()], \
                         'summary':book_series.series.summary,'position':str(book_series.bookNumber)} for book_series in self.book_series_set.all()]
-        files = [{'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':file.fileLocation.url} for file in self.bookfile_set.all()]
+        
+        files = [{'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':file.fileLocation.url} if file.localCache \
+                    else {'id':file.id, 'name':file.fileType.name, 'description':file.fileType.description,'url':reverse('bookFetch', args=[file.id])} \
+                    for file in self.bookfile_set.all()  ]
         return {
             'id':self.id,
             'title':self.title,
             'authors':[model_to_dict(author) for author in self.authors.all()],
-            'publisher':self.publisher,
+            'publisher':model_to_dict(self.publisher),
             'series':series_data,
             'tags':[model_to_dict(tag) for tag in self.tags.all()],
             'slug':self.slug,
-            'isbn':self.isbn,
+            'isbn':str(self.isbn),
             'filetypes':files,
             'coverurl':self.cover.url
             }
@@ -91,7 +96,8 @@ class FileType(models.Model):
 class BookFile(models.Model):
     book = models.ForeignKey(Book)
     fileType = models.ForeignKey(FileType)
-    def save_path(instance, filename):
+    localCache = models.BooleanField(default=False)
+    def save_path(self, instance, filename):
         fname, dot, extension = filename.rpartition('.')
         slug = instance.book.title
         return '%s.%s' % (slug, extension) 

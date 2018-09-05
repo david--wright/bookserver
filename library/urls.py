@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     # url(r'^bookServer/', include('bookServer.foo.urls')),
     url(r'^books/$', BookList.as_view()),
     url(r'^books/(.+?)/$', BookDetail.as_view()),
+    url(r'^books/(.+?)/(.+?)/$', BookFetch.as_view(),name='bookFetch'),
     url(r'^authors/$', AuthorList.as_view()),
     url(r'^authors/(.+?)/$', AuthorDetail.as_view()),
     url(r'^index/$', Index.as_view()),
@@ -22,4 +23,5 @@ urlpatterns = patterns('',
 	url(r'^auto/$', Autocomplete.as_view()),
     url(r'^upload/$', BookUpload.as_view(),name='upload'),
     url(r'^$', TemplateView.as_view(template_name='library/angularCatalog.html'),name='cat'),
+
 )
