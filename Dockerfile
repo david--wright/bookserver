@@ -18,7 +18,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /usr/src/app
 COPY requirements.txt ./
-COPY --from=0 "/home/sdk/binding/python/dist/" ./
+COPY --from=0 "/home/sdk/bindings/python/dist/" ./
 RUN pip install -r requirements.txt \
 && ldconfig /usr/local/lib/python2.7/site-packages/mega/
 COPY . .
