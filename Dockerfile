@@ -14,7 +14,7 @@ FROM python:2
 LABEL maintainer="discipleofhoid@gmail.com"
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        mysql-client libc-ares2 libssl1.0.0 libcrypto++9 libsodium13 libfreeimage3 \
+        mysql-client libc-ares2 libcrypto++9 libsodium13 libfreeimage3 \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /usr/src/app
 COPY requirements.txt ./
