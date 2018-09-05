@@ -9,6 +9,7 @@ RUN ./configure --disable-silent-rules --enable-python --disable-examples
 RUN make
 WORKDIR /home/sdk/bindings/python
 RUN python setup.py bdist_wheel
+RUN mv /home/sdk/bindings/python/dist/megasdk*.whl /home/sdk/bindings/python/dist/megasdk.whl
 	
 FROM python:2
 LABEL maintainer="discipleofhoid@gmail.com"
